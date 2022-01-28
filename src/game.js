@@ -39,8 +39,16 @@ Game.prototype = {
         this.game.snakes = [];
 
         //create player
-        var snake = new PlayerSnake(this.game, 'circle', 0, 0);
+        let cursors = this.game.input.keyboard.createCursorKeys();
+
+        var snake = new PlayerSnake(this.game, 'circle', cursors, 0, 0, 0xffafadf);
         this.game.camera.follow(snake.head);
+
+        let cursors2 = this.game.input.keyboard.addKeys( { 'up': Phaser.KeyCode.W, 'down': Phaser.KeyCode.S, 'left': Phaser.KeyCode.A, 'right': Phaser.KeyCode.D } );
+
+        var snake2 = new PlayerSnake(this.game, 'circle', cursors2, 100, 0, 0x00ff00);
+        this.game.camera.follow(snake.head);
+
 
         //create bots
         new BotSnake(this.game, 'circle2', -200, 0);

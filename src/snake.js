@@ -5,7 +5,7 @@
  * @param  {Number} x         coordinate
  * @param  {Number} y         coordinate
  */
-Snake = function(game, spriteKey, x, y) {
+Snake = function(game, spriteKey, x, y, tint = 0xffffff) {
     this.game = game;
     //create an array of snakes in the game object and add this snake
     if (!this.game.snakes) {
@@ -15,6 +15,7 @@ Snake = function(game, spriteKey, x, y) {
     this.debug = false;
     this.snakeLength = 0;
     this.spriteKey = spriteKey;
+    this.tint = tint;
 
     //various quantities that can be changed
     this.scale = 0.6;
@@ -53,6 +54,7 @@ Snake = function(game, spriteKey, x, y) {
     //it is locked to the head of this snake
     this.edgeOffset = 4;
     this.edge = this.game.add.sprite(x, y - this.edgeOffset, this.spriteKey);
+    this.edge.tint = 0xff00ff;
     this.edge.name = "edge";
     this.edge.alpha = 0;
     this.game.physics.p2.enable(this.edge, this.debug);
@@ -95,6 +97,7 @@ Snake.prototype = {
     addSectionAtPosition: function(x, y) {
         //initialize a new section
         var sec = this.game.add.sprite(x, y, this.spriteKey);
+        sec.tint = this.tint;
         this.game.physics.p2.enable(sec, this.debug);
         sec.body.setCollisionGroup(this.collisionGroup);
         sec.body.collides([]);

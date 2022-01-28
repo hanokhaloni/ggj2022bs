@@ -5,9 +5,10 @@
  * @param  {Number} x         coordinate
  * @param  {Number} y         coordinate
  */
-PlayerSnake = function(game, spriteKey, x, y) {
-    Snake.call(this, game, spriteKey, x, y);
-    this.cursors = game.input.keyboard.createCursorKeys();
+PlayerSnake = function(game, spriteKey, cursors, x, y, tint) {
+    Snake.call(this, game, spriteKey, x, y, tint);
+
+    this.cursors = cursors;
 
     //handle the space key so that the player's snake can speed up
     var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -62,14 +63,14 @@ PlayerSnake.prototype.update = function() {
     else if (this.cursors.right.isDown) {
         this.head.body.rotateRight(this.rotationSpeed);
     }
-    //decide whether rotating left or right will angle the head towards
-    //the mouse faster, if arrow keys are not used
-    else if (dif < 0 && dif > -180 || dif > 180) {
-        this.head.body.rotateRight(this.rotationSpeed);
-    }
-    else if (dif > 0 && dif < 180 || dif < -180) {
-        this.head.body.rotateLeft(this.rotationSpeed);
-    }
+    // //decide whether rotating left or right will angle the head towards
+    // //the mouse faster, if arrow keys are not used
+    // else if (dif < 0 && dif > -180 || dif > 180) {
+    //     this.head.body.rotateRight(this.rotationSpeed);
+    // }
+    // else if (dif > 0 && dif < 180 || dif < -180) {
+    //     this.head.body.rotateLeft(this.rotationSpeed);
+    // }
 
     //call the original snake update method
     this.tempUpdate();
