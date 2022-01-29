@@ -100,17 +100,17 @@ Game.prototype = {
 
         //show logo splash
         this.showlogo();
-        //this.game.time.events.add(Phaser.Timer.SECOND * 2, this.showlogo(), this);
+        //this.game.time.events.add(Phaser.Timer.SECOND * 10, this.hideLogo(), this);
     },
     showlogo: function() {
         this.logo = this.game.add.sprite(0, 0, 'logo');
         this.logo.fixedToCamera = true;
-        this.game.input.onDown.add(this.removeLogo, this);
-        //this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.pause, this);
+        this.game.input.onDown.add(this.hideLogo, this);
+        this.game.time.events.add(Phaser.Timer.SECOND * 5, this.hideLogo, this);
 
     },
-    removeLogo: function() {
-        this.game.time.events.remove(this.pause, this);
+    hideLogo: function() {
+        //this.game.time.events.remove(this.pause, this);
         //this.game.input.onDown.remove(this.removeLogo, this);
         this.logo.kill();
         //this.game.paused = false;
