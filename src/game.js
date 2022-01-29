@@ -4,13 +4,13 @@ Game.prototype = {
     preload: function() {
 
         //load assets
-        this.game.load.image('circle','asset/circle.png');
-    	this.game.load.image('circle2','asset/circle2.png');
+        this.game.load.image('circle', 'asset/circle.png');
+        this.game.load.image('circle2', 'asset/circle2.png');
         this.game.load.image('shadow', 'asset/white-shadow.png');
-    	this.game.load.image('background', 'asset/tile.png');
+        this.game.load.image('background', 'asset/tile.png');
 
-    	this.game.load.image('eye-white', 'asset/eye-white.png');
-    	this.game.load.image('eye-black', 'asset/eye-black.png');
+        this.game.load.image('eye-white', 'asset/eye-white.png');
+        this.game.load.image('eye-black', 'asset/eye-black.png');
 
         this.game.load.image('food', 'asset/hex.png');
     },
@@ -18,8 +18,8 @@ Game.prototype = {
         var width = this.game.width;
         var height = this.game.height;
 
-        this.game.world.setBounds(-width, -height, width*2, height*2);
-    	this.game.stage.backgroundColor = '#444';
+        this.game.world.setBounds(-width, -height, width * 2, height * 2);
+        this.game.stage.backgroundColor = '#444';
 
         //add tilesprite background
         var background = this.game.add.tileSprite(-width, -height,
@@ -32,7 +32,7 @@ Game.prototype = {
         this.foodCollisionGroup = this.game.physics.p2.createCollisionGroup();
 
         //add food randomly
-        for (var i = 0 ; i < 100 ; i++) {
+        for (var i = 0; i < 100; i++) {
             this.initFood(Util.randomInt(-width, width), Util.randomInt(-height, height));
         }
 
@@ -41,10 +41,10 @@ Game.prototype = {
         //create player
         let cursors = this.game.input.keyboard.createCursorKeys();
 
-        var snake = new PlayerSnake(this.game, 'circle', cursors, 0, 0, 0xffffff);
+        var snake = new PlayerSnake(this.game, 'circle', cursors, 0, 0, 0xff0000);
         this.game.camera.follow(snake.head);
 
-        let cursors2 = this.game.input.keyboard.addKeys( { 'up': Phaser.KeyCode.W, 'down': Phaser.KeyCode.S, 'left': Phaser.KeyCode.A, 'right': Phaser.KeyCode.D } );
+        let cursors2 = this.game.input.keyboard.addKeys({ 'up': Phaser.KeyCode.W, 'down': Phaser.KeyCode.S, 'left': Phaser.KeyCode.A, 'right': Phaser.KeyCode.D });
 
         var snake2 = new PlayerSnake(this.game, 'circle', cursors2, 100, 0, 0x00ff00);
         this.game.camera.follow(snake.head);
@@ -62,7 +62,7 @@ Game.prototype = {
 
 
         //initialize snake groups and collision
-        for (var i = 0 ; i < this.game.snakes.length ; i++) {
+        for (var i = 0; i < this.game.snakes.length; i++) {
             var snake = this.game.snakes[i];
             snake.head.body.setCollisionGroup(this.snakeHeadCollisionGroup);
             snake.head.body.collides([this.foodCollisionGroup]);
@@ -75,10 +75,10 @@ Game.prototype = {
      */
     update: function() {
         //update game components
-        for (var i = this.game.snakes.length - 1 ; i >= 0 ; i--) {
+        for (var i = this.game.snakes.length - 1; i >= 0; i--) {
             this.game.snakes[i].update();
         }
-        for (var i = this.foodGroup.children.length - 1 ; i >= 0 ; i--) {
+        for (var i = this.foodGroup.children.length - 1; i >= 0; i--) {
             var f = this.foodGroup.children[i];
             f.food.update();
         }
@@ -98,11 +98,10 @@ Game.prototype = {
     },
     snakeDestroyed: function(snake) {
         //place food where snake was destroyed
-        for (var i = 0 ; i < snake.headPath.length ;
-        i += Math.round(snake.headPath.length / snake.snakeLength) * 2) {
+        for (var i = 0; i < snake.headPath.length; i += Math.round(snake.headPath.length / snake.snakeLength) * 2) {
             this.initFood(
-                snake.headPath[i].x + Util.randomInt(-10,10),
-                snake.headPath[i].y + Util.randomInt(-10,10)
+                snake.headPath[i].x + Util.randomInt(-10, 10),
+                snake.headPath[i].y + Util.randomInt(-10, 10)
             );
         }
     }
