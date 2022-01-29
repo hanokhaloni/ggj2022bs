@@ -22,10 +22,12 @@ Game.prototype = {
         var width = this.game.width;
         var height = this.game.height;
 
+        this.phaseFoodCount = 100;
+
         this.viewWidth = width;
         this.viewHeight = height;
 
-        this.game.world.setBounds(-width, -height, width * 9, height * 9);
+        this.game.world.setBounds(-width, -height, width * 3, height * 3);
         this.game.stage.backgroundColor = '#444';
 
         //add tilesprite background
@@ -47,18 +49,18 @@ Game.prototype = {
         this.scoreP2Text.fixedToCamera = true;
 
         // the phase
-        this.phase0 = 'Phase 0 : Get to 10 points together';
+        this.phase0 = 'Phase 0 : Get to ' + this.phaseFoodCount + ' points together';
         this.phaseText = this.game.add.text(220, 10, this.phase0, { font: '45px Arial', fill: '#a0a' });
         this.phaseText.fixedToCamera = true;
 
         //add food randomly
-        for (var i = 0; i < 100; i++) {
+        for (var i = 0; i < 500; i++) {
             this.initFood(Util.randomInt(-width, width), Util.randomInt(-height, height));
         }
 
         //add music
         this.music = this.game.add.audio('background-music');
-        this.music.play();
+        //this.music.play();
         this.music.volume = 1.0;
 
         this.game.snakes = [];
@@ -66,6 +68,7 @@ Game.prototype = {
         //create player
         let cursors1 = this.game.input.keyboard.addKeys({ 'up': Phaser.KeyCode.W, 'down': Phaser.KeyCode.S, 'left': Phaser.KeyCode.A, 'right': Phaser.KeyCode.D });
         this.snakeP1 = new PlayerSnake(this.game, 'circle', cursors1, 0, 0, 0xff0000, this.scoreP1Text);
+        //this.game.camera.focusOnXY(300, 3000);
         this.game.camera.follow(this.snakeP1.head);
 
         let cursors2 = this.game.input.keyboard.createCursorKeys();
@@ -77,29 +80,13 @@ Game.prototype = {
         new BotSnake(this.game, 'circle2', -200, 0);
         new BotSnake(this.game, 'circle2', 200, 0);
 
-        new BotSnake(this.game, 'circle2', -300, 0);
-        new BotSnake(this.game, 'circle2', 300, 0);
-
-        new BotSnake(this.game, 'circle2', -400, 0);
-        new BotSnake(this.game, 'circle2', 400, 0);
-
-        new BotSnake(this.game, 'circle2', -500, 0);
-        new BotSnake(this.game, 'circle2', 500, 0);
-
-        new BotSnake(this.game, 'circle2', -600, 0);
-        new BotSnake(this.game, 'circle2', 600, 0);
-
-        new BotSnake(this.game, 'circle2', -220, 500);
-        new BotSnake(this.game, 'circle2', 220, 500);
-
-        new BotSnake(this.game, 'circle2', -180, -500);
-        new BotSnake(this.game, 'circle2', 180, -500);
-
-        new BotSnake(this.game, 'circle2', -180, -600);
-        new BotSnake(this.game, 'circle2', 180, -600);
-
-        new BotSnake(this.game, 'circle2', -180, -700);
-        new BotSnake(this.game, 'circle2', 180, -700);
+        for (var i = 0; i < 12; i++) {
+            //-width, , width * 3, -height,height * 3
+            new BotSnake(this.game,
+                'circle2',
+                this.game.rnd.integerInRange(-width, width * 3),
+                this.game.rnd.integerInRange(-height, height * 3));
+        }
 
 
         //initialize snake groups and collision
@@ -171,14 +158,8 @@ Game.prototype = {
         }
     },
     render: function() {
-        this.game.debug.text("Snake1 score : " + this.snakeP1.score, 32, 32);
-        this.game.debug.text("Snake2 score : " + this.snakeP2.score, 32, 64);
-
-        if (this.snakeP1.score + this.snakeP2.score === 10) {
-            console.log("more than 10 !");
-            this.phaseText.text = 'Phase complete - last worm standing wins!';
-            this.snakeP1.score++;
-            this.snakeP2.score++;
+        if (this.snakeP1.score + this.snakeP2.score === this.phaseFoodCount) {
+            this.startPhase2;
             //TODO move this to somewhere with less damage.... laso this needs to happen only once!
         }
 
@@ -195,5 +176,18 @@ Game.prototype = {
         // this.game.camera.bounds.width = this.viewWidth * this.game.camera.scale.x;
         // this.game.camera.bounds.height = this.viewHeight * this.game.camera.scale.y;
         // this.game.camera.follow(this.snakeP1.head);
+    },
+    startPhase1: function() {
+
+    },
+    startPhase2: function() {
+        console.log("more than " + this.phaseFoodCount);
+        this.phaseText.text = 'Phase complete - last worm standing wins!';
+        this.snakeP1.score++;
+        this.snakeP2.score++;
+    },
+
+    gameover: function() {
+
     }
 };
