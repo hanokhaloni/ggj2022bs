@@ -15,6 +15,8 @@ Game.prototype = {
         this.game.load.image('food', 'asset/hex.png');
 
         this.game.load.image('logo', 'asset/logo.png');
+
+        this.game.load.audio('background-music', 'asset/Paul Whiteman - Parade of the wooden soldiers.mp3');
     },
     create: function() {
         var width = this.game.width;
@@ -54,6 +56,10 @@ Game.prototype = {
             this.initFood(Util.randomInt(-width, width), Util.randomInt(-height, height));
         }
 
+        //add music
+        this.music = this.game.add.audio('background-music');
+        this.music.play();
+        this.music.volume = 1.0;
 
         this.game.snakes = [];
 
