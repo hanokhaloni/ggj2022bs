@@ -47,11 +47,11 @@ Game.prototype = {
         this.foodCollisionGroup = this.game.physics.p2.createCollisionGroup();
 
         //  The score
-        this.scoreP1String = 'Score P1 : ';
-        this.scoreP1Text = this.game.add.text(10, 10, this.scoreP1String, { font: '34px Arial', fill: '#f00' });
+        this.scoreP1String = 'Score 0 ';
+        this.scoreP1Text = this.game.add.text(10, 10, this.scoreP1String, { font: '45px Arial', fill: '#f00' });
         this.scoreP1Text.fixedToCamera = true;
-        this.scoreP2String = 'Score P2 : ';
-        this.scoreP2Text = this.game.add.text(10, 50, this.scoreP2String, { font: '34px Arial', fill: '#0f0' });
+        this.scoreP2String = 'Score 0 ';
+        this.scoreP2Text = this.game.add.text(10, 50, this.scoreP2String, { font: '45px Arial', fill: '#0f0' });
         this.scoreP2Text.fixedToCamera = true;
 
         // the phase
@@ -88,13 +88,7 @@ Game.prototype = {
         new BotSnake(this.game, 'circle2', -200, 0);
         new BotSnake(this.game, 'circle2', 200, 0);
 
-        for (var i = 0; i < 12; i++) {
-            //-width, , width * 3, -height,height * 3
-            new BotSnake(this.game,
-                'circle2',
-                this.game.rnd.integerInRange(-width, width * 3),
-                this.game.rnd.integerInRange(-height, height * 3));
-        }
+        this.createRandomBots(12);
 
 
         //initialize snake groups and collision
@@ -121,7 +115,7 @@ Game.prototype = {
 
     },
     hideLogo: function() {
-        this.game.time.events.remove(this.hideaaaaaaaaadadLogo, this);
+        this.game.time.events.remove(this.hideLogo, this);
         //this.game.input.onDown.remove(this.removeLogo, this);
         this.logo.kill();
         this.game.time.slowMotion = 1;
@@ -224,6 +218,7 @@ Game.prototype = {
         var tada = this.game.add.audio('tada');
         tada.play();
         this.game.camera.shake(0.10, 200);
+        this.createRandomBots(15);
     },
     hidePhase2Text: function() {
         this.phase2text.kill();
@@ -271,5 +266,17 @@ Game.prototype = {
             gameoverText.setShadow(5, 5, 'rgba(0,0,0,0.5)', 5);
 
         }
+    },
+
+
+    createRandomBots: function(count) {
+        for (var i = 0; i < count; i++) {
+            //-width, , width * 3, -height,height * 3
+            new BotSnake(this.game,
+                'circle2',
+                this.game.rnd.integerInRange(-this.viewWidth, this.viewWidth * 3),
+                this.game.rnd.integerInRange(-this.viewWidth, this.viewWidth * 3));
+        }
+        console.log("bots created : " + count);
     }
 };
