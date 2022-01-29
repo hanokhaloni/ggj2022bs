@@ -64,11 +64,11 @@ Game.prototype = {
         this.game.snakes = [];
 
         //create player
-        let cursors = this.game.input.keyboard.createCursorKeys();
-        this.snakeP1 = new PlayerSnake(this.game, 'circle', cursors, 0, 0, 0xff0000, this.scoreP1Text);
+        let cursors1 = this.game.input.keyboard.addKeys({ 'up': Phaser.KeyCode.W, 'down': Phaser.KeyCode.S, 'left': Phaser.KeyCode.A, 'right': Phaser.KeyCode.D });
+        this.snakeP1 = new PlayerSnake(this.game, 'circle', cursors1, 0, 0, 0xff0000, this.scoreP1Text);
         this.game.camera.follow(this.snakeP1.head);
 
-        let cursors2 = this.game.input.keyboard.addKeys({ 'up': Phaser.KeyCode.W, 'down': Phaser.KeyCode.S, 'left': Phaser.KeyCode.A, 'right': Phaser.KeyCode.D });
+        let cursors2 = this.game.input.keyboard.createCursorKeys();
         this.snakeP2 = new PlayerSnake(this.game, 'circle', cursors2, 100, 0, 0x00ff00, this.scoreP2Text);
         //this.game.camera.follow(this.snakeP1.head);
 
@@ -80,14 +80,26 @@ Game.prototype = {
         new BotSnake(this.game, 'circle2', -300, 0);
         new BotSnake(this.game, 'circle2', 300, 0);
 
+        new BotSnake(this.game, 'circle2', -400, 0);
         new BotSnake(this.game, 'circle2', 400, 0);
-        new BotSnake(this.game, 'circle2', 400, 0);
+
+        new BotSnake(this.game, 'circle2', -500, 0);
+        new BotSnake(this.game, 'circle2', 500, 0);
+
+        new BotSnake(this.game, 'circle2', -600, 0);
+        new BotSnake(this.game, 'circle2', 600, 0);
 
         new BotSnake(this.game, 'circle2', -220, 500);
         new BotSnake(this.game, 'circle2', 220, 500);
 
         new BotSnake(this.game, 'circle2', -180, -500);
         new BotSnake(this.game, 'circle2', 180, -500);
+
+        new BotSnake(this.game, 'circle2', -180, -600);
+        new BotSnake(this.game, 'circle2', 180, -600);
+
+        new BotSnake(this.game, 'circle2', -180, -700);
+        new BotSnake(this.game, 'circle2', 180, -700);
 
 
         //initialize snake groups and collision
@@ -102,10 +114,6 @@ Game.prototype = {
         //show logo splash
         this.showlogo();
         //this.game.time.events.add(Phaser.Timer.SECOND * 2, this.showlogo(), this);
-
-
-
-
     },
     showlogo: function() {
         this.logo = this.game.add.sprite(0, 0, 'logo');
@@ -166,9 +174,11 @@ Game.prototype = {
         this.game.debug.text("Snake1 score : " + this.snakeP1.score, 32, 32);
         this.game.debug.text("Snake2 score : " + this.snakeP2.score, 32, 64);
 
-        if (this.snakeP1.score + this.snakeP2.score > 10) {
+        if (this.snakeP1.score + this.snakeP2.score === 10) {
             console.log("more than 10 !");
             this.phaseText.text = 'Phase complete - last worm standing wins!';
+            this.snakeP1.score++;
+            this.snakeP2.score++;
             //TODO move this to somewhere with less damage.... laso this needs to happen only once!
         }
 
