@@ -13,6 +13,8 @@ Game.prototype = {
         this.game.load.image('eye-black', 'asset/eye-black.png');
 
         this.game.load.image('food', 'asset/hex.png');
+
+        this.game.load.image('logo', 'asset/logo.png');
     },
     create: function() {
         var width = this.game.width;
@@ -35,6 +37,10 @@ Game.prototype = {
         for (var i = 0; i < 100; i++) {
             this.initFood(Util.randomInt(-width, width), Util.randomInt(-height, height));
         }
+
+        //show logo splash
+        this.showlogo();
+        this.game.input.onDown.add(this.removeLogo, this);
 
         this.game.snakes = [];
 
@@ -70,6 +76,17 @@ Game.prototype = {
             snake.addDestroyedCallback(this.snakeDestroyed, this);
         }
     },
+    showlogo: function() {
+        this.logo = this.game.add.sprite(0, 0, 'logo');
+        this.logo.fixedToCamera = true;
+    },
+
+    removeLogo: function() {
+
+        this.game.input.onDown.remove(this.removeLogo, this);
+        this.logo.kill();
+
+    },
     /**
      * Main update loop
      */
@@ -82,6 +99,7 @@ Game.prototype = {
             var f = this.foodGroup.children[i];
             f.food.update();
         }
+        this.game.world.bringToTop(this.logo);
     },
     /**
      * Create a piece of food at a point
