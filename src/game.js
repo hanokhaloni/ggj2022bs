@@ -60,7 +60,7 @@ Game.prototype = {
 
         //add music
         this.music = this.game.add.audio('background-music');
-        //this.music.play();
+        this.music.play();
         this.music.volume = 1.0;
 
         this.game.snakes = [];
@@ -103,16 +103,18 @@ Game.prototype = {
         //this.game.time.events.add(Phaser.Timer.SECOND * 10, this.hideLogo(), this);
     },
     showlogo: function() {
+        this.game.time.slowMotion = 3;
         this.logo = this.game.add.sprite(0, 0, 'logo');
         this.logo.fixedToCamera = true;
-        this.game.input.onDown.add(this.hideLogo, this);
+        //this.game.input.onDown.add(this.hideLogo, this);
         this.game.time.events.add(Phaser.Timer.SECOND * 5, this.hideLogo, this);
 
     },
     hideLogo: function() {
-        //this.game.time.events.remove(this.pause, this);
+        this.game.time.events.remove(this.hideaaaaaaaaadadLogo, this);
         //this.game.input.onDown.remove(this.removeLogo, this);
         this.logo.kill();
+        this.game.time.slowMotion = 1;
         //this.game.paused = false;
 
     },
@@ -159,7 +161,7 @@ Game.prototype = {
     },
     render: function() {
         if (this.snakeP1.score + this.snakeP2.score === this.phaseFoodCount) {
-            this.startPhase2;
+            this.startPhase2();
             //TODO move this to somewhere with less damage.... laso this needs to happen only once!
         }
 
@@ -185,6 +187,28 @@ Game.prototype = {
         this.phaseText.text = 'Phase complete - last worm standing wins!';
         this.snakeP1.score++;
         this.snakeP2.score++;
+
+        this.phase2text = this.game.add.text(this.game.world.centerX, this.game.world.centerY, "- Duality! -\nLast worm standing\nWINS!");
+        this.phase2text.anchor.setTo(0.5);
+        this.phase2text.fixedToCamera = true;
+
+        this.phase2text.font = 'Fontdiner Swanky';
+        this.phase2text.fontSize = 60;
+
+        var grd = this.phase2text.context.createLinearGradient(0, 0, 0, this.phase2text.canvas.height);
+        grd.addColorStop(0, '#8ED6FF');
+        grd.addColorStop(1, '#004CB3');
+        this.phase2text.fill = grd;
+
+        this.phase2text.align = 'center';
+        this.phase2text.stroke = '#000000';
+        this.phase2text.strokeThickness = 2;
+        this.phase2text.setShadow(5, 5, 'rgba(0,0,0,0.5)', 5);
+
+        this.game.time.events.add(Phaser.Timer.SECOND * 5, this.hidePhase2Text, this);
+    },
+    hidePhase2Text: function() {
+        this.phase2text.kill();
     },
 
     gameover: function() {
