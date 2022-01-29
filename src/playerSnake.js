@@ -5,8 +5,8 @@
  * @param  {Number} x         coordinate
  * @param  {Number} y         coordinate
  */
-PlayerSnake = function(game, spriteKey, cursors, x, y, tint) {
-    Snake.call(this, game, spriteKey, x, y, tint);
+PlayerSnake = function(game, spriteKey, cursors, x, y, tint, scoretext) {
+    Snake.call(this, game, spriteKey, x, y, tint, scoretext);
 
     this.cursors = cursors;
 
@@ -26,10 +26,10 @@ PlayerSnake.prototype.constructor = PlayerSnake;
 
 //make this snake light up and speed up when the space key is down
 PlayerSnake.prototype.spaceKeyDown = function() {
-    this.speed = this.fastSpeed;
-    this.shadow.isLightingUp = true;
-}
-//make the snake slow down when the space key is up again
+        this.speed = this.fastSpeed;
+        this.shadow.isLightingUp = true;
+    }
+    //make the snake slow down when the space key is up again
 PlayerSnake.prototype.spaceKeyUp = function() {
     this.speed = this.slowSpeed;
     this.shadow.isLightingUp = false;
@@ -47,20 +47,18 @@ PlayerSnake.prototype.update = function() {
     var mousePosY = this.game.input.activePointer.worldY;
     var headX = this.head.body.x;
     var headY = this.head.body.y;
-    var angle = (180*Math.atan2(mousePosX-headX,mousePosY-headY)/Math.PI);
+    var angle = (180 * Math.atan2(mousePosX - headX, mousePosY - headY) / Math.PI);
     if (angle > 0) {
-        angle = 180-angle;
-    }
-    else {
-        angle = -180-angle;
+        angle = 180 - angle;
+    } else {
+        angle = -180 - angle;
     }
     var dif = this.head.body.angle - angle;
     this.head.body.setZeroRotation();
     //allow arrow keys to be used
     if (this.cursors.left.isDown) {
         this.head.body.rotateLeft(this.rotationSpeed);
-    }
-    else if (this.cursors.right.isDown) {
+    } else if (this.cursors.right.isDown) {
         this.head.body.rotateRight(this.rotationSpeed);
     }
     // //decide whether rotating left or right will angle the head towards

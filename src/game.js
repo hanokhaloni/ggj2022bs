@@ -33,6 +33,14 @@ Game.prototype = {
         this.snakeHeadCollisionGroup = this.game.physics.p2.createCollisionGroup();
         this.foodCollisionGroup = this.game.physics.p2.createCollisionGroup();
 
+        //  The score
+        this.scoreP1String = 'Score P1 : ';
+        this.scoreP1Text = this.game.add.text(10, 10, this.scoreP1String, { font: '34px Arial', fill: '#f00' });
+        this.scoreP1Text.fixedToCamera = true;
+        this.scoreP2String = 'Score P2 : ';
+        this.scoreP2Text = this.game.add.text(10, 50, this.scoreP2String, { font: '34px Arial', fill: '#0f0' });
+        this.scoreP2Text.fixedToCamera = true;
+
         //add food randomly
         for (var i = 0; i < 100; i++) {
             this.initFood(Util.randomInt(-width, width), Util.randomInt(-height, height));
@@ -43,15 +51,14 @@ Game.prototype = {
 
         //create player
         let cursors = this.game.input.keyboard.createCursorKeys();
-
-        var snake = new PlayerSnake(this.game, 'circle', cursors, 0, 0, 0xff0000);
-        this.game.camera.follow(snake.head);
+        this.snakeP1 = new PlayerSnake(this.game, 'circle', cursors, 0, 0, 0xff0000, this.scoreP1Text);
+        this.game.camera.follow(this.snakeP1.head);
 
         let cursors2 = this.game.input.keyboard.addKeys({ 'up': Phaser.KeyCode.W, 'down': Phaser.KeyCode.S, 'left': Phaser.KeyCode.A, 'right': Phaser.KeyCode.D });
-
-        var snake2 = new PlayerSnake(this.game, 'circle', cursors2, 100, 0, 0x00ff00);
-        this.game.camera.follow(snake.head);
-
+        this.snakeP2 = new PlayerSnake(this.game, 'circle', cursors2, 100, 0, 0x00ff00, this.scoreP2Text);
+        //this.game.camera.follow(this.snakeP1.head);
+        console.log("this.snakeP1.score =" + this.snakeP1.score);
+        console.log("this.scoreP2Text.text =" + this.scoreP2Text.text);
 
         //create bots
         new BotSnake(this.game, 'circle2', -200, 0);
@@ -72,16 +79,19 @@ Game.prototype = {
 
         //initialize snake groups and collision
         for (var i = 0; i < this.game.snakes.length; i++) {
-            var snake = this.game.snakes[i];
-            snake.head.body.setCollisionGroup(this.snakeHeadCollisionGroup);
-            snake.head.body.collides([this.foodCollisionGroup]);
+            var snakeP1 = this.game.snakes[i];
+            snakeP1.head.body.setCollisionGroup(this.snakeHeadCollisionGroup);
+            snakeP1.head.body.collides([this.foodCollisionGroup]);
             //callback for when a snake is destroyed
-            snake.addDestroyedCallback(this.snakeDestroyed, this);
+            snakeP1.addDestroyedCallback(this.snakeDestroyed, this);
         }
 
         //show logo splash
         this.showlogo();
         //this.game.time.events.add(Phaser.Timer.SECOND * 2, this.showlogo(), this);
+
+
+
 
     },
     showlogo: function() {
@@ -138,5 +148,9 @@ Game.prototype = {
                 snake.headPath[i].y + Util.randomInt(-10, 10)
             );
         }
+    },
+    render: function() {
+        // this.game.debug.text("Snake1 score : " + this.snakeP1.score, 32, 32);
+        // this.game.debug.text("Snake2 score : " + this.snakeP2.score, 32, 64);
     }
 };
