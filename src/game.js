@@ -20,7 +20,10 @@ Game.prototype = {
         var width = this.game.width;
         var height = this.game.height;
 
-        this.game.world.setBounds(-width, -height, width * 2, height * 2);
+        this.viewWidth = width;
+        this.viewHeight = height;
+
+        this.game.world.setBounds(-width, -height, width * 9, height * 9);
         this.game.stage.backgroundColor = '#444';
 
         //add tilesprite background
@@ -159,9 +162,22 @@ Game.prototype = {
 
         if (this.snakeP1.score + this.snakeP2.score > 10) {
             console.log("more than 10 !");
-            this.phaseText.text = 'Phase complete - last wowrm standing wins!';
+            this.phaseText.text = 'Phase complete - last worm standing wins!';
             //TODO move this to somewhere with less damage.... laso this needs to happen only once!
         }
 
+        this.zoomIn();
+
+    },
+    zoomIn: function() {
+        this.game.camera.scale.x *= 0.9999;
+        this.game.camera.scale.y *= 0.9999;
+        //TODO fix this zoom
+
+        // this.game.camera.bounds.x = this.viewWidth * this.game.camera.scale.x;
+        // this.game.camera.bounds.y = this.viewHeight * this.game.camera.scale.y;
+        // this.game.camera.bounds.width = this.viewWidth * this.game.camera.scale.x;
+        // this.game.camera.bounds.height = this.viewHeight * this.game.camera.scale.y;
+        // this.game.camera.follow(this.snakeP1.head);
     }
 };
