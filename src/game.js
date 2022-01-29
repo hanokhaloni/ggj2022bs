@@ -41,6 +41,11 @@ Game.prototype = {
         this.scoreP2Text = this.game.add.text(10, 50, this.scoreP2String, { font: '34px Arial', fill: '#0f0' });
         this.scoreP2Text.fixedToCamera = true;
 
+        // the phase
+        this.phase0 = 'Phase 0 : Get to 10 points together';
+        this.phaseText = this.game.add.text(220, 10, this.phase0, { font: '45px Arial', fill: '#a0a' });
+        this.phaseText.fixedToCamera = true;
+
         //add food randomly
         for (var i = 0; i < 100; i++) {
             this.initFood(Util.randomInt(-width, width), Util.randomInt(-height, height));
@@ -57,8 +62,7 @@ Game.prototype = {
         let cursors2 = this.game.input.keyboard.addKeys({ 'up': Phaser.KeyCode.W, 'down': Phaser.KeyCode.S, 'left': Phaser.KeyCode.A, 'right': Phaser.KeyCode.D });
         this.snakeP2 = new PlayerSnake(this.game, 'circle', cursors2, 100, 0, 0x00ff00, this.scoreP2Text);
         //this.game.camera.follow(this.snakeP1.head);
-        console.log("this.snakeP1.score =" + this.snakeP1.score);
-        console.log("this.scoreP2Text.text =" + this.scoreP2Text.text);
+
 
         //create bots
         new BotSnake(this.game, 'circle2', -200, 0);
@@ -150,7 +154,13 @@ Game.prototype = {
         }
     },
     render: function() {
-        // this.game.debug.text("Snake1 score : " + this.snakeP1.score, 32, 32);
-        // this.game.debug.text("Snake2 score : " + this.snakeP2.score, 32, 64);
+        this.game.debug.text("Snake1 score : " + this.snakeP1.score, 32, 32);
+        this.game.debug.text("Snake2 score : " + this.snakeP2.score, 32, 64);
+
+        if (this.snakeP1.score + this.snakeP2.score > 10) {
+            console.log("more than 10 !");
+            this.phaseText.text = 'Phase complete - last wowrm standing wins!';
+        }
+
     }
 };
