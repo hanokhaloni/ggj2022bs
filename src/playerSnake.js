@@ -24,6 +24,7 @@ PlayerSnake = function(game, spriteKey, cursors, x, y, tint, scoretext) {
 PlayerSnake.prototype = Object.create(Snake.prototype);
 PlayerSnake.prototype.constructor = PlayerSnake;
 
+
 //make this snake light up and speed up when the space key is down
 PlayerSnake.prototype.spaceKeyDown = function() {
         this.speed = this.fastSpeed;

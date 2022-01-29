@@ -19,6 +19,7 @@ Game.prototype = {
         this.game.load.audio('background-music', 'asset/Paul Whiteman - Parade of the wooden soldiers.mp3');
         this.game.load.audio('tada', 'asset/ta-da-organ-sound-effect-4122925.mp3');
         this.game.load.audio('alert', 'asset/tng_red_alert2.mp3');
+        this.game.load.audio('gameover', 'asset/thats-it-man-game-over-man!-game-over!.mp3');
 
 
     },
@@ -27,6 +28,7 @@ Game.prototype = {
         var height = this.game.height;
 
         this.phaseFoodCount = 100;
+        this.currentPhase = 1;
 
         this.viewWidth = width;
         this.viewHeight = height;
@@ -74,10 +76,12 @@ Game.prototype = {
         this.snakeP1 = new PlayerSnake(this.game, 'circle', cursors1, 0, 0, 0xff0000, this.scoreP1Text);
         //this.game.camera.focusOnXY(300, 3000);
         this.game.camera.follow(this.snakeP1.head);
+        this.snakeP1.addDestroyedCallback(this.gameover, this)
 
         let cursors2 = this.game.input.keyboard.createCursorKeys();
         this.snakeP2 = new PlayerSnake(this.game, 'circle', cursors2, 100, 0, 0x00ff00, this.scoreP2Text);
         //this.game.camera.follow(this.snakeP1.head);
+        this.snakeP2.addDestroyedCallback(this.gameover, this)
 
 
         //create bots
@@ -196,6 +200,7 @@ Game.prototype = {
         this.phaseText.text = 'Phase complete - last worm standing wins!';
         this.snakeP1.score++;
         this.snakeP2.score++;
+        this.currentPhase = 2;
 
         this.phase2text = this.game.add.text(this.game.world.centerX, this.game.world.centerY, "- Duality! -\nLast worm standing\nWINS!");
         this.phase2text.anchor.setTo(0.5);
@@ -218,12 +223,53 @@ Game.prototype = {
 
         var tada = this.game.add.audio('tada');
         tada.play();
+        this.game.camera.shake(0.10, 200);
     },
     hidePhase2Text: function() {
         this.phase2text.kill();
     },
-
     gameover: function() {
+        this.game.camera.flash(0xff0000, 500);
+        this.music.stop();
+        var gameoversound = this.game.add.audio('gameover');
+        gameoversound.play();
+        //this.game.paused = true;
+        if (this.currentPhase === 1) {
+            console.log("You all lost!");
+            var gameoverText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, "Game over!-\n You need to work together\nYou can do this!!");
+            gameoverText.anchor.setTo(0.5);
+            gameoverText.fixedToCamera = true;
 
+            gameoverText.font = 'Fontdiner Swanky';
+            gameoverText.fontSize = 80;
+
+            var grd = gameoverText.context.createLinearGradient(0, 0, 0, gameoverText.canvas.height);
+            grd.addColorStop(0, '#FF0000');
+            grd.addColorStop(1, '#FFF000');
+            gameoverText.fill = grd;
+
+            gameoverText.align = 'center';
+            gameoverText.stroke = '#000000';
+            gameoverText.strokeThickness = 2;
+            gameoverText.setShadow(5, 5, 'rgba(0,0,0,0.5)', 5);
+
+        } else {
+            console.log("someone won");
+            var gameoverText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, "Game over!-\n Someone won\nI was too lazy to implement\nwho the winner is!!\nCongrats the winner!");
+            gameoverText.anchor.setTo(0.5);
+            gameoverText.fixedToCamera = true;
+
+            gameoverText.font = 'Fontdiner Swanky';
+            gameoverText.fontSize = 120;
+
+
+            gameoverText.fill = '#ff00ff';;
+
+            gameoverText.align = 'center';
+            gameoverText.stroke = '#000000';
+            gameoverText.strokeThickness = 2;
+            gameoverText.setShadow(5, 5, 'rgba(0,0,0,0.5)', 5);
+
+        }
     }
 };
