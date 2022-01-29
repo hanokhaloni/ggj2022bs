@@ -38,9 +38,6 @@ Game.prototype = {
             this.initFood(Util.randomInt(-width, width), Util.randomInt(-height, height));
         }
 
-        //show logo splash
-        this.showlogo();
-        this.game.input.onDown.add(this.removeLogo, this);
 
         this.game.snakes = [];
 
@@ -60,6 +57,12 @@ Game.prototype = {
         new BotSnake(this.game, 'circle2', -200, 0);
         new BotSnake(this.game, 'circle2', 200, 0);
 
+        new BotSnake(this.game, 'circle2', -300, 0);
+        new BotSnake(this.game, 'circle2', 300, 0);
+
+        new BotSnake(this.game, 'circle2', 400, 0);
+        new BotSnake(this.game, 'circle2', 400, 0);
+
         new BotSnake(this.game, 'circle2', -220, 500);
         new BotSnake(this.game, 'circle2', 220, 500);
 
@@ -75,17 +78,28 @@ Game.prototype = {
             //callback for when a snake is destroyed
             snake.addDestroyedCallback(this.snakeDestroyed, this);
         }
+
+        //show logo splash
+        this.showlogo();
+        //this.game.time.events.add(Phaser.Timer.SECOND * 2, this.showlogo(), this);
+
     },
     showlogo: function() {
         this.logo = this.game.add.sprite(0, 0, 'logo');
         this.logo.fixedToCamera = true;
+        this.game.input.onDown.add(this.removeLogo, this);
+        //this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.pause, this);
+
     },
-
     removeLogo: function() {
-
-        this.game.input.onDown.remove(this.removeLogo, this);
+        this.game.time.events.remove(this.pause, this);
+        //this.game.input.onDown.remove(this.removeLogo, this);
         this.logo.kill();
+        //this.game.paused = false;
 
+    },
+    pause: function() {
+        //this.game.paused = true;
     },
     /**
      * Main update loop
@@ -99,7 +113,9 @@ Game.prototype = {
             var f = this.foodGroup.children[i];
             f.food.update();
         }
-        this.game.world.bringToTop(this.logo);
+        if (this.logo) {
+            this.game.world.bringToTop(this.logo);
+        }
     },
     /**
      * Create a piece of food at a point
