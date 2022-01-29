@@ -17,6 +17,10 @@ Game.prototype = {
         this.game.load.image('logo', 'asset/logo.png');
 
         this.game.load.audio('background-music', 'asset/Paul Whiteman - Parade of the wooden soldiers.mp3');
+        this.game.load.audio('tada', 'asset/ta-da-organ-sound-effect-4122925.mp3');
+        this.game.load.audio('alert', 'asset/tng_red_alert2.mp3');
+
+
     },
     create: function() {
         var width = this.game.width;
@@ -108,6 +112,8 @@ Game.prototype = {
         this.logo.fixedToCamera = true;
         //this.game.input.onDown.add(this.hideLogo, this);
         this.game.time.events.add(Phaser.Timer.SECOND * 5, this.hideLogo, this);
+        var alertSound = this.game.add.audio('alert');
+        alertSound.play();
 
     },
     hideLogo: function() {
@@ -169,8 +175,11 @@ Game.prototype = {
 
     },
     zoomIn: function() {
-        this.game.camera.scale.x *= 0.9999;
-        this.game.camera.scale.y *= 0.9999;
+        //console.log("ZOOM" + this.game.camera.scale.x);
+        if (this.game.camera.scale.x > 0.5) {
+            this.game.camera.scale.x *= 0.9999;
+            this.game.camera.scale.y *= 0.9999;
+        }
         //TODO fix this zoom
 
         // this.game.camera.bounds.x = this.viewWidth * this.game.camera.scale.x;
@@ -206,6 +215,9 @@ Game.prototype = {
         this.phase2text.setShadow(5, 5, 'rgba(0,0,0,0.5)', 5);
 
         this.game.time.events.add(Phaser.Timer.SECOND * 5, this.hidePhase2Text, this);
+
+        var tada = this.game.add.audio('tada');
+        tada.play();
     },
     hidePhase2Text: function() {
         this.phase2text.kill();
